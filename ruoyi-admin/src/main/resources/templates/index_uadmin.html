@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+    
+    <title>若依管理系统首页</title>
+    <meta name="keywords" content="若依管理系统首页">
+    <meta name="description" content="若依管理系统首页">
+     
+    <!--Loading bootstrap css-->
+    <link th:href="@{favicon.ico}" rel="stylesheet"/>
+    <link th:href="@{/css/uadmin/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css}" rel="stylesheet"/>
+	
+	<link th:href="@{/css/uadmin/bootstrap/css/bootstrap.min.css?v=v3.2.0}" rel="stylesheet">
+	<link th:href="@{/css/uadmin/font-awesome/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+	
+	<link th:href="@{/css/uadmin/animate/css/animate.css?v=3.5.2}" rel="stylesheet">
+	
+	<!--  Validform -->
+	<link th:href="@{/css/uadmin/Validform_v5.3.2/css/style.css}" rel="stylesheet" type="text/css" media="all">
+
+    <!--Loading style-->
+    <link th:href="@{/css/uadmin/uadmin/css/themes/style1/orange-blue.css}" rel="stylesheet"  class="default-style">
+    <link th:href="@{/css/uadmin/uadmin/css/themes/style1/orange-blue.css}" rel="stylesheet" id="theme-change" class="style-change color-change">
+    <link th:href="@{/css/uadmin/uadmin/css/style-responsive.css}" rel="stylesheet">
+    
+</head>
+
+<body class=" ">
+    <div>
+        <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a>
+        <!--END BACK TO TOP-->
+        <%@include file="../decorators/uadmin/topbar.jsp"%>
+        <div id="wrapper">
+            <%@include file="../decorators/uadmin/left.jsp"%>
+            <!--BEGIN PAGE WRAPPER-->
+            <div id="page-wrapper">
+                <!--BEGIN TITLE & BREADCRUMB PAGE-->
+                <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+                    <div class="page-header pull-left">
+                        <div class="page-title">控制台</div>
+                    </div>
+                    <ol class="breadcrumb page-breadcrumb pull-left">
+                        <li><i class="fa fa-home"></i>&nbsp;<a href="${adminPath}">首页</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="hidden"><a href="#">控制台</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="active">控制台</li>
+                    </ol>
+                   
+                    <div class="clearfix"></div>
+                </div>
+                <!--END TITLE & BREADCRUMB PAGE-->
+                <!--BEGIN CONTENT-->
+                <div class="page-content">
+                     <%@include file="../decorators/uadmin/main.jsp"%>
+			    </div>
+			    <!--END CONTENT-->
+    </div>
+    <!--BEGIN FOOTER-->
+    <div id="footer">
+        <div class="copyright">© [[${copyrightYear}]] RuoYi Copyright </div>
+    </div>
+    <!--END FOOTER-->
+    <!--END PAGE WRAPPER-->
+    </div>
+    </div>
+    
+    <script th:src="@{/css/uadmin/jquery/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/css/uadmin/bootstrap/js/bootstrap.min.js?v=3.3.6}"></script>
+	<script th:src="@{/css/uadmin/metisMenu/jquery.metisMenu.js}"></script>
+	<script th:src="@{/css/uadmin/slimscroll/jquery.slimscroll.min.js}"></script>
+	<script th:src="@{/css/uadmin/layer/layer.min.js}"></script>
+	<script th:src="@{/css/uadmin/pace/pace.min.js}"></script>
+	<!-- bootstrap-hover-dropdown -->
+	<script th:src="@{/css/uadmin/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js}"></script>
+	<!-- jquery-cookie -->
+	<script th:src="@{/css/uadmin/jquery-cookie/jquery.cookie.js}"></script>
+	<!-- Validform -->
+	<script type="text/javascript" th:src="@{/css/uadmin/Validform_v5.3.2/js/Validform_v5.3.2.js}"></script>
+    
+    
+    <script th:src="@{/css/uadmin/js/jquery-migrate-1.2.1.min.js}"></script>
+    <script th:src="@{/css/uadmin/js/jquery-ui.js}"></script>
+    <!--loading bootstrap js-->
+    <script th:src="@{/css/uadmin/js/html5shiv.js}"></script>
+    <script th:src="@{/css/uadmin/js/respond.min.js}"></script>
+    <script th:src="@{/css/uadmin/js/jquery.menu.js}"></script>
+    <script th:src="@{/css/uadmin/slimscroll/jquery.slimscroll.js}"></script>
+    <!--CORE JAVASCRIPT-->
+    <script th:src="@{/css/uadmin/js/main.js}"></script>
+    <script>
+		$(document).ready(function(){
+			var list_theme = $('.dropdown-theme-setting > li > select#list_theme');
+		    list_theme.on('change', function(){
+		    	var theme=$(this).val();
+		    	$.get('${adminPath}/theme/'+theme+'?url='+window.top.location.href,function(result){   
+		    		//window.location.reload();
+		    		window.top.location.href="${adminPath}";
+		    	});
+		    	//$.get('${adminPath}/theme/'+theme+'?url='+window.top.location.href,function(result){   window.location.reload();});
+		    });
+		});
+		
+		var changePasswordForm;
+		function changePassword(){
+			changePasswordForm.ajaxPost();
+		}
+		$(document).ready(function() {
+			    changePasswordForm=$("#changePasswordForm").Validform({
+				tiptype:function(msg,o,cssctl){
+					if(!o.obj.is("form")){
+						var objtip=o.obj.siblings(".Validform_checktip");
+						cssctl(objtip,o.type);
+						objtip.text(msg);
+					}
+				},beforeSubmit:function(curform){
+					try{
+						var beforeFunc=beforeSubmit;
+						if(beforeFunc&&typeof(beforeFunc)=="function"){
+							return beforeFunc(curform); 
+						}
+					}catch(err){
+						
+					}
+					return true;	
+				},callback:function(result){
+					if(result.ret==0)
+	              	{
+	              	    top.layer.alert(result.msg, {icon: 0, title:'提示'});
+	              	    //运行回调
+	          	        callFunc();
+	              	}else
+	              	{
+	              		top.layer.alert(result.msg, {icon: 0, title:'警告'});
+	              	}
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>
