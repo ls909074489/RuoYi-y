@@ -44,7 +44,7 @@ public class SysIndexController extends BaseController
         mmap.put("copyrightYear", Global.getCopyrightYear());
         
 		// 加载模版
-		String theme = getTheme(request);
+		String theme = "inspinia";//getTheme(request);
         return "index_" + theme;
     }
 
