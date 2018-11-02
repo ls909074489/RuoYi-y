@@ -125,15 +125,27 @@
 
 		// 批量强退
 		function batchForceLogout() {
-		    var rows = $.table.selectColumns("sessionId");
-		    if (rows.length == 0) {
+		    var sessionIds = $.table.selectColumns("sessionId");
+		    var loginNames = $.table.selectColumns("loginName");
+		    if (sessionIds.length == 0) {
 		        $.modal.alertWarning("请选择要强退的用户");
 		        return;
 		    }
-		    $.modal.confirm("确认要强退选中的" + rows.length + "条数据吗?", function() {
+		    
+		    var sessionStr="";
+		    var userNameStr="";
+		    for(var i=0;i<sessionIds.length;i++){
+		    	sessionStr+="sessionId="+sessionIds[i]+"&";
+		    	userNameStr+="username="+loginNames[i]+"&";
+		    }
+		    $.modal.confirm("确认要强退选中的" + sessionIds.length + "条数据吗?", function() {
 		        var url = prefix + "/batchForceLogout";
-		        var data = { "ids": rows };
-		        $.operate.post(url, data);
+		        var data = sessionStr+userNameStr;
+		        //var data = JSON.stringify(params);//{sessionId,username};
+		        //var data={"sessionId":sessionIds,"username":loginNames};
+		        console.info(data);
+		       $.operate.post(url, data);
+		     
 		    });
 		}
 	</script>

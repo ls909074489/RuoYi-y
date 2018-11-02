@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,7 +17,6 @@ import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.system.domain.SysUserOnline;
-import com.ruoyi.system.domain.UserSessionVo;
 import com.ruoyi.system.service.impl.SysUserOnlineServiceImpl;
 import com.ruoyi.web.core.base.BaseController;
 
@@ -58,8 +56,7 @@ public class SysUserOnlineController extends BaseController
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @PostMapping("/batchForceLogout")
     @ResponseBody
-    public AjaxResult batchForceLogout(@RequestBody List<UserSessionVo> sessions)
-    {
+    public AjaxResult batchForceLogout(String []sessionId,String []username){
 //    	@RequestParam("ids[]") String[] ids,
 //        for (String sessionId : ids)
 //        {
@@ -82,16 +79,16 @@ public class SysUserOnlineController extends BaseController
 //            userOnlineService.saveOnline(online);
 //        }
 //        return success();
-    	
+    	System.out.println(sessionId[0]);
     	 try {
              //要踢出的用户中是否有自己
              boolean hasOwn=false;
-             Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
-             for (UserSessionVo sessionVo : sessions) {
-                 if(sessionVo.getSessionId().equals(sessionId)){
+             Serializable sId = SecurityUtils.getSubject().getSession().getId();
+             for (int i=0;i<sessionId.length;i++) {
+                 if(sessionId[i].equals(sId)){
                      hasOwn=true;
                  }else{
-                	 userOnlineService.kickout(sessionVo.getSessionId(),sessionVo.getUsername());
+                	 //userOnlineService.kickout(sessionId[i],username[i]);
                  }
              }
              if(hasOwn){
@@ -99,6 +96,7 @@ public class SysUserOnlineController extends BaseController
              }
              return success("踢出用户成功");
          } catch (Exception e) {
+        	 e.printStackTrace();
              return error("踢出用户失败");
          }
     }
