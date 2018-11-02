@@ -64,4 +64,11 @@ public interface ISysUserOnlineService
      * @return 会话集合
      */
     public List<SysUserOnline> selectOnlineByExpired(Date expiredDate);
+    
+    
+    /**
+     * 踢出
+     * @param sessionId
+     */
+    public void kickout(String sessionId,String loginName);
 }
