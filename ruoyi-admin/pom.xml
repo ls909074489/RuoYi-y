@@ -55,9 +55,7 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-framework</artifactId>
             <version>${ruoyi.version}</version>
-
         </dependency>
-        
     </dependencies>
 
     <build>
