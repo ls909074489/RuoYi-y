@@ -57,7 +57,7 @@
 				              <time ff="msgdate" datetime="" title="">2014-7-12 15:30</time>
 				            </div>
 				        </header>
-				     <div ff="content" class="am-comment-bd">此处是消息内容aaaaaaaaaa</div>
+				     <div ff="content" class="am-comment-bd">此处是消息内容</div>
 				    </div>
 				</li>
 			</ul>
@@ -176,9 +176,9 @@
 		box.find('[ff="nickname"]').html(msg.isSelf? msg.nickname+"(me)" :msg.nickname); //在box中设置昵称
 		box.find('[ff="msgdate"]').html(msg.date); 		//在box中设置时间
 		box.find('[ff="content"]').html(msg.content); 	//在box中设置内容
-		box.addClass(msg.isSelf? 'am-comment-flip':'');	//右侧显示
-		box.addClass(msg.isSelf? 'am-comment-warning':'am-comment-success');//颜色
-		box.css((msg.isSelf? 'margin-left':'margin-right'),"20%");//外边距
+		box.addClass(msg.isSelf? '':'am-comment-flip');	//右侧显示
+		box.addClass(msg.isSelf? 'am-comment-success':'am-comment-warning');//颜色
+		box.css((msg.isSelf? 'margin-right':'margin-left'),"20%");//外边距
 		
 		$("#ChatBox div:eq(0)").scrollTop(999999); 	//滚动条移动至最底部
 		
