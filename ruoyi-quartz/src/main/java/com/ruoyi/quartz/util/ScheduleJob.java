@@ -12,6 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.ScheduleConstants;
 import com.ruoyi.common.utils.bean.BeanUtils;
+import com.ruoyi.framework.util.applicationcontext.SpringContextUtil;
 import com.ruoyi.quartz.domain.SysJob;
 import com.ruoyi.quartz.domain.SysJobLog;
 import com.ruoyi.quartz.service.ISysJobLogService;
@@ -22,8 +23,8 @@ import com.ruoyi.quartz.service.ISysJobLogService;
  * @author ruoyi
  *
  */
-public class ScheduleJob extends QuartzJobBean
-{
+public class ScheduleJob extends QuartzJobBean{
+	
     private static final Logger log = LoggerFactory.getLogger(ScheduleJob.class);
 
     private ExecutorService service = Executors.newSingleThreadExecutor();

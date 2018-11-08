@@ -47,16 +47,16 @@ public class WebSocketServer {
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
         log.info(session.getId()+"有新连接加入！当前在线人数为" + getOnlineCount());
-        try {
-        	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        	JSONObject obj = new JSONObject();
-    		//向JSON对象中添加发送时间
-    		obj.put("date", df.format(new Date()));
-    		obj.put("msg","连接成功");
-        	sendMessage(obj.toString());
-        } catch (IOException e) {
-            log.error("websocket IO异常");
-        }
+//        try {
+//        	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        	JSONObject obj = new JSONObject();
+//    		//向JSON对象中添加发送时间
+//    		obj.put("date", df.format(new Date()));
+//    		obj.put("msg","连接成功");
+//        	sendMessage(obj.toString());
+//        } catch (IOException e) {
+//            log.error("websocket IO异常");
+//        }
     }
  
     /**

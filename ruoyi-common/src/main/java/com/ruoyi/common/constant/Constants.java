@@ -61,4 +61,9 @@ public class Constants
      * 排序的方向 "desc" 或者 "asc".
      */
     public static String IS_ASC = "isAsc";
+    
+    /**
+	 * redis连接超时时间
+	 */
+    public static int REDIS_TOMEOUT = 30 * 1000;
 }

@@ -144,3 +144,5 @@ gen:
   autoRemovePre: true
   # 表前缀(类名不会包含表前缀)
   tablePrefix: sys_
+  
+distributed.channel: distributedRedisChannel  
