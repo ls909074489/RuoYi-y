@@ -62,6 +62,12 @@
             <artifactId>ruoyi-quartz</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
+        <!-- 代码管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-code</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

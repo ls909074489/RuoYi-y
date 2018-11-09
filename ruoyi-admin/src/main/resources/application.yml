@@ -71,8 +71,23 @@ spring:
   # 文件上传
   servlet:
      multipart:
-       max-file-size:  30MB
-       max-request-size:  30MB
+       max-file-size:  150MB
+       max-request-size:  150MB
+  #邮箱配置
+  mail:
+    host: smtp.163.com
+    username: exceptionreporter@163.com
+    #QQ邮箱的授权码
+    password: Bb123456
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    from: exceptionreporter@163.com
   # 服务模块
   devtools:
     restart:
@@ -145,4 +160,6 @@ gen:
   # 表前缀(类名不会包含表前缀)
   tablePrefix: sys_
   
-distributed.channel: distributedRedisChannel  
+distributed.channel: distributedRedisChannel
+
+auto.deploy.local.reps: d:/reps
