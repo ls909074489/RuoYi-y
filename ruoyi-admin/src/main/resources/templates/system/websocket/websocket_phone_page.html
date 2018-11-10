@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<meta charset="utf-8">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	
+	<link th:href="@{/css/amazeui.min.css}" rel="stylesheet" />
+	
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/amazeui.min.js}"></script>
+	
+	<style type="text/css">
+	.am-comment-hd {
+		height:20px;
+	}
+	.am-comment-bd{
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	</style>
+</head>
+<body class="gray-bg">
+	<div id="main" style="margin-top: 2px;">
+		<!-- 聊天内容展示区域 -->
+		<div id="ChatBox" class="am-g am-g-fixed">
+			<div class="am-u-lg-12" id="chatBoxDivId"
+				style="height: 600px; border: 1px solid #999; overflow-y: scroll;">
+				<ul id="chatContent" class="am-comments-list am-comments-list-flip">
+					<li id="msgtmp" class="am-comment" style="display: none;"><a
+						href=""> <img th:src="@{/img/other.jpg}"
+							class="am-comment-avatar">
+					</a>
+						<div class="am-comment-main">
+							<div ff="content" class="am-comment-bd">此处是消息内容</div>
+						</div></li>
+				</ul>
+			</div>
+		</div>
+		<!-- 聊天内容发送区域 -->
+		<div id="EditBox" class="am-g am-g-fixed">
+			<table>
+				<tr>
+					<td style="width: 100%;">
+						<!--style给定宽度可以影响编辑器的最终宽度-->
+						<!-- <script type="text/plain" id="myEditor"
+							style="width: 100%; height: 50px;"></script> -->
+						<textarea id="myEditor" style="overflow-y:hidden;width: 100%;height: 30px;"
+						 onpropertychange="this.style.height=this.scrollHeight + 'px'" 
+						 oninput="autoTextAreaHeight(this);" rows="1"></textarea>
+					</td>
+					<td style="">
+						<button id="send" style="height: 30px;padding: .1em .5em;" type="button"
+							class="am-btn am-btn-primary am-btn-block">发送</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+	<script>
+		var websocket = null;
+		$(function() {
+			
+			$("#chatBoxDivId").css("height", ($(window).height())+"px");
+			
+			
+			if ('WebSocket' in window) {
+				websocket = new WebSocket("ws://192.168.0.11:8089/websocket");
+				// 建立成功后的回调函数
+				websocket.onopen = function(ev) {
+					setMessageInnerHTML("open");
+				}
+				websocket.onclose = function() {
+					setMessageInnerHTML("close");
+				}
+				websocket.onmessage = function(ev) {
+					var obj = eval('(' + ev.data + ')');
+					addMessage(obj);
+				}
+				//监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+				window.onbeforeunload = function() {
+					websocket.close();
+				}
+
+			} else {
+				alert("浏览器不支持");
+			}
+
+			//窗口大小变化时，调整显示效果
+			$("#ChatBox div:eq(0)").height($(this).height() - 70);
+			$(window).resize(function() {
+				$("#ChatBox div:eq(0)").height($(this).height() - 50);
+			});
+
+			var nickname = "奋青";
+			$("#send").click(function() {
+					var tVal=$("#myEditor").val();
+					if (tVal!=null&&tVal!='') { // 判断消息输入框是否为空
+						//构建一个标准格式的JSON对象
+						var obj = JSON.stringify({
+							nickname : nickname,
+							content : tVal
+						});
+						// 发送消息
+						websocket.send(obj);
+						// 清空消息输入框
+						$("#myEditor").val('');
+						// 消息输入框获取焦点
+						$("#myEditor").focus();
+					}
+				});
+
+		});
+
+		//将消息显示在网页上
+		function setMessageInnerHTML(innerHTML) {
+			$("#messageSpanId").html(innerHTML);
+		}
+
+		//关闭连接
+		function closeWebSocket() {
+			websocket.close();
+		}
+
+		//人名nickname，时间date，是否自己isSelf，内容content
+		function addMessage(msg) {
+			var box = $("#msgtmp").clone(); //复制一份模板，取名为box
+			box.show(); //设置box状态为显示
+			box.appendTo("#chatContent"); //把box追加到聊天面板中
+			box.find('[ff="nickname"]').html(
+					msg.isSelf ? msg.nickname + "(me)" : msg.nickname); //在box中设置昵称
+			box.find('[ff="msgdate"]').html(msg.date); //在box中设置时间
+			box.find('[ff="content"]').html(msg.content); //在box中设置内容
+			box.addClass(msg.isSelf ? '' : 'am-comment-flip'); //右侧显示
+			box.addClass(msg.isSelf ? 'am-comment-success'
+					: 'am-comment-warning');//颜色
+			box.css((msg.isSelf ? 'margin-right' : 'margin-left'), "20%");//外边距
+
+			$("#ChatBox div:eq(0)").scrollTop(999999); //滚动条移动至最底部
+
+		}
+		
+		function autoTextAreaHeight(o){
+			//o.style.height = o.scrollTop + o.scrollHeight + "px";
+			o.style.height=o.scrollHeight + 'px';
+			//$("#send").height(o.scrollHeight-20);
+			$("#send").css("height", (o.scrollHeight)+"px");
+		}
+	</script>
+</body>
+</html>
