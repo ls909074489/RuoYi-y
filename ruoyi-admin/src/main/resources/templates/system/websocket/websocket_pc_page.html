@@ -75,7 +75,47 @@
 	<script>
 	
 	var websocket = null;
+	var timerArr = null;
 	$(function(){
+		 $.extend( { 
+		    	/** 
+		    	* 调用方法： var timerArr = $.blinkTitle.show(); 
+		    	* $.blinkTitle.clear(timerArr); 
+		    	*/ 
+		    	blinkTitle : { 
+			    	show : function(toMsg) { //有新消息时在title处闪烁提示 
+			    	var step = 0, _title = document.title; 
+			    	var timer = setInterval(function() { 
+			    	step++; 
+			    	if (step == 3) { 
+			    	step = 1 
+			    	} 
+	
+			    	if (step == 1) { 
+			    	document.title = '【　　　】' + _title 
+			    	} 
+	
+			    	if (step == 2) { 
+			    	document.title = '【新消息】' + _title 
+			    	} 
+	
+			    	}, 500); 
+			    	return [ timer, _title ]; 
+			    	}, 
+			    	/** 
+			    	* @param timerArr[0], timer标记 
+			    	* @param timerArr[1], 初始的title文本内容 
+			    	*/ 
+			    	clear : function(timerArr) { //去除闪烁提示，恢复初始title文本 
+				    	if (timerArr) { 
+					    	clearInterval(timerArr[0]); 
+					    	document.title = timerArr[1]; 
+				    	} 
+			    	} 
+		    	} 
+		    }); 
+		    
+		    	
 		    if('WebSocket' in window){
 		        websocket = new WebSocket("ws://192.168.0.11:8089/websocket");
 		        // 建立成功后的回调函数
@@ -86,9 +126,11 @@
 		            setMessageInnerHTML("close");
 		        }
 		        websocket.onmessage=function (ev) {
+		        	console.info("onmessage==========");
 		        	console.info(ev.data);
 		            var obj = eval(   '('+ev.data+')'   );
 			    	addMessage(obj);
+			    	timerArr = $.blinkTitle.show(); 
 		        }
 		        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 		        window.onbeforeunload = function(){
@@ -146,12 +188,8 @@
 	            // 消息输入框获取焦点
 	            um.focus();
 	        }
-	    
+	    	$.blinkTitle.clear(timerArr); //取消闪动
 	    });
-	    
-	    
-	    
-	    
 	    
 	});
 	   

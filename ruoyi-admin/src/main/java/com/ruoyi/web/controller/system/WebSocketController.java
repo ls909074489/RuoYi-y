@@ -31,7 +31,7 @@ public class WebSocketController {
     		returnPage = prefix + "/websocket_phone_page";
     	}else{
     	    //电脑
-    		returnPage = prefix + "/websocket_phone_page";
+    		returnPage = prefix + "/websocket_pc_page";
     	}
         return returnPage;
     }
