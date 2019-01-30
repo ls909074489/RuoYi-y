@@ -80,6 +80,8 @@ public class SysUser extends BaseEntity
 
     /** 岗位组 */
     private Long[] postIds;
+    
+    public Integer blogCount= 5;
 
     public Long getUserId()
     {
@@ -280,8 +282,17 @@ public class SysUser extends BaseEntity
     {
         this.postIds = postIds;
     }
+    
 
-    @Override
+    public Integer getBlogCount() {
+		return blogCount;
+	}
+
+	public void setBlogCount(Integer blogCount) {
+		this.blogCount = blogCount;
+	}
+
+	@Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
@@ -303,6 +314,7 @@ public class SysUser extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("blogCount", getBlogCount())
             .toString();
     }
 }

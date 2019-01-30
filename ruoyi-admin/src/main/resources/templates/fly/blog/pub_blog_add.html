@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+	<link th:href="@{/ajax/libs/summernote-0.8.11-dist/summernote.css}" rel="stylesheet"/>
+	<link th:href="@{/ajax/libs/summernote-0.8.11-dist/summernote-bs4.css}" rel="stylesheet"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/font-awesome.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/syntax.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/style.css?v=2}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/webuploader.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/Uploader.css?v=3}">
+    
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-blog-add">
+        	<div class="form-group">
+       			<label class="col-sm-3 control-label">
+       				<button type="submit" class="btn btn-primary">提交</button>
+					<button id="backList" class="btn btn-primary" type="button">返回</button>
+       			</label>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">公告标题：</label>
+				<div class="col-sm-8">
+					<input id="blogTitle" name="blogTitle" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">公告类型：</label>
+				<div class="col-sm-8">
+					<select name="blogType" class="form-control m-b" th:with="type=${@dict.getType('sys_blog_type')}">
+	                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">公告内容：</label>
+				<div class="col-sm-8">
+				    <input id="blogContent" name="blogContent" type="hidden">
+				    <div class="summernote"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">公告状态：</label>
+				<div class="col-sm-8">
+				    <div class="radio-box" th:each="dict : ${@dict.getType('sys_blog_status')}">
+						<input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
+						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">图片：</label>
+				<div class="col-sm-8">
+	                <div id="uploader" class="wu-example">
+	                    <div class="queueList">
+	                        <div id="dndArea" class="placeholder">
+	                            <div id="filePicker" class="webuploader-container"><div class="webuploader-pick">点击选择图片</div>
+		                            <div id="rt_rt_1cgqvjr4lgt31fq71ldpdm318821" style="position: absolute; top: 0px; left: 348.016px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;">
+			                            <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*">
+			                            <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+		                            </div>
+	                            </div>
+	                            <p>或将照片拖到这里，单次最多可选300张</p>
+	                        </div>
+	                        <ul class="filelist" style="display: none;"></ul></div>
+	                    <div class="statusBar element-invisible" style="">
+	                        <div class="progress" style="display: none;">
+	                            <span class="text">0%</span>
+	                            <span class="percentage" style="width: 0%;"></span>
+	                        </div><div class="info">共0张（0B），已上传0张</div>
+	                        <div class="btns">
+	                            <div id="filePicker2" class="webuploader-container">
+	                            	<div class="webuploader-pick">继续添加</div>
+		                            <div id="rt_rt_1cgqvjr4olut16n1ih81m6687i6" style="position: absolute; top: 0px; left: 10px; width: 94px; height: 42px; overflow: hidden; bottom: auto; right: auto;">
+		                            	<input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*">
+		                            	<label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+		                            </div>
+	                            </div>
+	                            <div class="uploadBtn state-pedding">开始上传</div>
+	                        </div>
+	                    </div>
+	                </div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    
+    <script th:src="@{/ajax/libs/summernote-0.8.11-dist/summernote.min.js}"></script>
+    <script th:src="@{/ajax/libs/summernote-0.8.11-dist/lang/summernote-zh-CN.js}"></script>
+    
+    <script th:src="@{/Uploader/js/global.js}"></script>
+	<script th:src="@{/Uploader/js/webuploader.js}"></script>
+	
+    <script th:src="@{/Uploader/js/Uploader.js?v=30}"></script>
+    
+    <script type="text/javascript">
+    
+	    $(function() {
+	    	$('.summernote').summernote({
+	 			height : '220px',
+	 			lang : 'zh-CN'
+	 		});
+	 	    
+	 		$("#backList").click(function(){
+	 			 window.location.href=/*[[@{/}]]*/'/pub/blog/flyList';
+	 		});
+	    });
+	   
+	    
+		var prefix = /*[[@{/}]]*/'/pub/blog'; //ctx + "/pub/blog"
+		
+		$("#form-blog-add").validate({
+			rules:{
+				blogTitle:{
+					required:true,
+				}
+			},
+			submitHandler: function(form) {
+				var sHTML = $('.summernote').code();
+				$("#blogContent").val(sHTML);
+				$.operate.save(prefix + "/add", $('#form-blog-add').serialize());
+			}
+		});
+	</script>
+</body>
+</html>

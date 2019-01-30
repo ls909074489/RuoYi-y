@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<link rel="shortcut icon" href="favicon.ico">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<!-- <link th:href="@{/css/layui.css}" rel="stylesheet" > -->
+	<link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+	<!-- bootstrap-table 表格插件样式 -->
+	<link th:href="@{/css/animate.css}" rel="stylesheet"/>
+	<link th:href="@{/css/style.css}" rel="stylesheet"/>
+	<link th:href="@{/ruoyi/css/ry-ui.min.css}" rel="stylesheet"/>
+	<link th:href="@{/ajax/libs/summernote/summernote.css?v=2}" rel="stylesheet"/>
+	<link th:href="@{/ajax/libs/summernote/summernote-bs3.css?v=25}" rel="stylesheet"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/font-awesome.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/syntax.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/style.css?v=2}">
+	<link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/webuploader.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/Uploader/css/Uploader.css?v=3}">
+
+<body class="white-bg" style="margin-top: -20px;">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-notice-add">
+        	<div class="form-group">
+       			<label class="col-sm-3 control-label">
+       				<button type="submit" class="btn btn-primary">提交</button>
+					<button id="backList" class="btn btn-primary" type="button">返回</button>
+       			</label>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">公告标题：</label>
+				<div class="col-sm-8">
+					<input id="noticeTitle" name="noticeTitle" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">公告类型：</label>
+				<div class="col-sm-8">
+					<select name="noticeType" class="form-control m-b" th:with="type=${@dict.getType('sys_notice_type')}">
+	                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">图片：</label>
+				<div class="col-sm-8">
+	                <div id="uploader" class="wu-example">
+	                    <div class="queueList">
+	                        <div id="dndArea" class="placeholder">
+	                            <div id="filePicker" class="webuploader-container"><div class="webuploader-pick">点击选择图片</div>
+		                            <div id="rt_rt_1cgqvjr4lgt31fq71ldpdm318821" style="position: absolute; top: 0px; left: 348.016px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;">
+			                            <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*">
+			                            <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+		                            </div>
+	                            </div>
+	                            <p>或将照片拖到这里，单次最多可选300张</p>
+	                        </div>
+	                        <ul class="filelist" style="display: none;"></ul></div>
+	                    <div class="statusBar element-invisible" style="">
+	                        <div class="progress" style="display: none;">
+	                            <span class="text">0%</span>
+	                            <span class="percentage" style="width: 0%;"></span>
+	                        </div><div class="info">共0张（0B），已上传0张</div>
+	                        <div class="btns">
+	                            <div id="filePicker2" class="webuploader-container">
+	                            	<div class="webuploader-pick">继续添加</div>
+		                            <div id="rt_rt_1cgqvjr4olut16n1ih81m6687i6" style="position: absolute; top: 0px; left: 10px; width: 94px; height: 42px; overflow: hidden; bottom: auto; right: auto;">
+		                            	<input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*">
+		                            	<label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+		                            </div>
+	                            </div>
+	                            <div class="uploadBtn state-pedding">开始上传</div>
+	                        </div>
+	                    </div>
+	                </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">公告内容：</label>
+				<div class="col-sm-8">
+				    <input id="noticeContent" name="noticeContent" type="hidden">
+				    <div class="summernote" id="summernote"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">公告状态：</label>
+				<div class="col-sm-8">
+					 <div class="radio-box" th:each="dict : ${@dict.getType('sys_notice_status')}">
+						<input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
+						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+<!--     <script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script th:src="@{/Uploader/js/global.js}"></script>
+	<script th:src="@{/Uploader/js/webuploader.js}"></script>
+
+	jquery-validate 表单验证插件
+	<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+	遮罩层
+	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+	<script th:src="@{/ajax/libs/layui/layui.js}"></script>
+	<script th:src="@{/ruoyi/js/common.js?v=2.1.0}"></script>
+	<script th:src="@{/ruoyi/js/ry-ui.min.js?v=2.1.0}"></script>
+	<script src="http://tajs.qq.com/stats?sId=62048022"></script>
+	<script th:inline="javascript"> var ctx = [[@{/}]]; </script> -->
+	
+	
+	<div>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	
+	<!-- bootstrap-table 表格插件 -->
+	<script src="/ajax/libs/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js"></script>
+	<script src="/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
+	<!-- jquery-validate 表单验证插件 -->
+	<script src="/ajax/libs/validate/jquery.validate.min.js"></script>
+	<script src="/ajax/libs/validate/messages_zh.min.js"></script>
+	<script src="/ajax/libs/validate/jquery.validate.extend.js"></script>
+	<!-- jquery-validate 表单树插件 -->
+	<script src="/ajax/libs/bootstrap-treetable/bootstrap-treetable.js"></script>
+	<!-- jquery-export 表格导出插件 -->
+	<script src="/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
+	<script src="/ajax/libs/bootstrap-table/extensions/export/tableExport.js"></script>
+	<!-- 遮罩层 -->
+	<script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+	<script src="/ajax/libs/iCheck/icheck.min.js"></script>
+	<script src="/ajax/libs/layer/layer.min.js"></script>
+	<script src="/ajax/libs/layui/layui.js"></script>
+	<script src="/ruoyi/js/common.js?v=2.3.0"></script>
+	<script src="/ruoyi/js/ry-ui.min.js?v=2.3.0"></script>
+	<script src="http://tajs.qq.com/stats?sId=62048022"></script>
+	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+</div>
+	
+    <script th:src="@{/ajax/libs/summernote/summernote.min.js?v=343}"></script>
+    <script th:src="@{/ajax/libs/summernote/lang/summernote-zh-CN.js}"></script>
+    
+  	<script th:src="@{/Uploader/js/Uploader.js?v=30}"></script>
+   
+    <script type="text/javascript">
+    
+    
+    $(function() {
+    	
+    	/* $('.summernote').summernote({
+		height : '220px',
+		lang : 'zh-CN'
+		}); */
+	
+	
+		$('#summernote').summernote({
+			toolbar: [
+			          ['style', ['style']],
+			          ['font', ['bold', 'italic', 'underline', 'clear']],
+			          ['fontname', ['fontname']],
+			          ['color', ['color']],
+			          ['para', ['ul', 'ol', 'paragraph']],
+			          ['height', ['height']],
+			          ['table', ['table']],
+			          ['insert', ['link', 'picture', 'hr']],
+			          ['view', ['fullscreen']]
+			],
+		    height: ($(window).height() - 300),
+		    callbacks: {
+		        onImageUpload: function(files) {
+		            uploadImage(files);
+		        }
+		    }
+		});
+		
+		$("#backList").click(function(){
+			 window.location.href=/*[[@{/}]]*/'/pub/blog/flyList';
+		});
+    });
+		
+		function uploadImage(files){
+			console.info(files);
+			var data = new FormData();
+	        data.append("file", files[0]);
+	        $.ajax({
+	            data : data,
+	            type : "POST",
+	            url : ctx+"common/attachment/uploadFile", //图片上传出来的url，返回的是图片上传后的路径，http格式
+	            cache : false,
+	            contentType : false,
+	            processData : false,
+	            dataType : "json",
+	            success: function(data) {//data是返回的hash,key之类的值，key是定义的文件名
+	            	console.info(data);
+	            	console.info(data.flag==true);
+	            	if(data.flag){
+	            		$('#summernote').summernote('insertImage', ctx+data.msg);
+	            	}else{
+	            		alert("fail");
+	            	}
+	            },
+	            error:function(){
+	                alert("上传失败");
+	            }
+	        });
+		}
+	    
+		var prefix = ctx + "system/notice"
+		$("#form-notice-add").validate({
+			rules:{
+				noticeTitle:{
+					required:true,
+				}
+			},
+			submitHandler: function(form) {
+				//var sHTML = $('.summernote').code();
+				var sHTML = $('.summernote').summernote('code');//$('.click2edit').summernote('destroy');
+				$("#noticeContent").val(sHTML);
+				console.info(sHTML);
+				//$.operate.save(prefix + "/save", $('#form-notice-add').serialize());
+				$.modal.loading("正在处理中，请稍后...");
+				var config = {
+					url : prefix + "/save",
+					type : "post",
+					dataType : "json",
+					data : $('#form-notice-add').serialize(),
+					success : function(result) {
+						console.info(result);
+						if (result.code == web_status.SUCCESS) {
+							$.modal.msgReload("保存成功,正在刷新数据请稍后……",
+									modal_status.SUCCESS)
+							window.location.href=/*[[@{/}]]*/'/pub/blog/flyList';		
+						} else {
+							$.modal.alertError(result.msg)
+						}
+						$.modal.closeLoading()
+					}
+				};
+				$.ajax(config);
+			}
+		});
+	</script>
+</body>
+</html>

@@ -16,6 +16,9 @@ import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.ExcelUtil;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.distributed.impl.UserAccountMessageClusterExecute;
+import com.ruoyi.framework.distributed.utils.DistributedRedisUtil;
+import com.ruoyi.framework.distributed.vo.ClusterMessage;
 import com.ruoyi.framework.shiro.service.PasswordService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.framework.web.page.TableDataInfo;
@@ -47,6 +50,9 @@ public class SysUserController extends BaseController
 
     @Autowired
     private PasswordService passwordService;
+    
+    @Autowired
+    private DistributedRedisUtil distributedUtil;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -60,6 +66,13 @@ public class SysUserController extends BaseController
     @ResponseBody
     public TableDataInfo list(SysUser user)
     {
+    	
+    	System.out.println("test>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    	SysUser msgData=new SysUser();
+    	msgData.setUserName("测试项目初始化上下文执行方法TestContextInit》》》》》》");
+		//分布式推送
+		distributedUtil.executeInCluster(new ClusterMessage(UserAccountMessageClusterExecute.class.getCanonicalName(), msgData));
+    	
         startPage();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);

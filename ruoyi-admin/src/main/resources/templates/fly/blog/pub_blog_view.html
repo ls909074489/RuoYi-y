@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
+  <title>Fly Template v3.0，基于 layui 的极简社区页面模版</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" type="text/css" th:href="@{/fly/res/layui/css/layui.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/fly/res/css/global.css}">
+  
+  
+  
+	<!-- bootstrap-table 表格插件样式 -->
+	<link th:href="@{/ruoyi/css/ry-ui.min.css}" rel="stylesheet"/>
+	
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <!-- jquery-validate 表单验证插件 -->
+  <script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+  <script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+  <script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+	<!-- jquery-validate 表单树插件 -->
+	
+	<!-- 遮罩层 -->
+	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+	<script th:src="@{/ruoyi/js/ry-ui.min.js?v=2.1.0}"></script>
+	
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+  	<span style="font-size: 18px;margin-top: 7px;" class="fly-logo" onclick="backNoticeList();"> &larr; 返回 </span>
+  	
+    <!-- <a class="fly-logo" href="/">
+       <img th:src="@{/fly/res/images/logo.png}" alt="layui">
+    </a> -->
+  </div>
+</div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12 content detail">
+      <div class="fly-panel detail-box">
+        <h1 th:text="${notice.noticeTitle}"></h1>
+        <div class="fly-detail-info">
+          <span class="layui-badge layui-bg-green fly-detail-column">动态</span>
+          <div class="fly-admin-box" data-id="123">
+          </div>
+          <span class="fly-list-nums"> 
+            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> <span id="noticeReplyCountSpan" th:text="${notice.replyCount}"></span></a>
+            <i class="iconfont" title="人气">&#xe60b;</i> <span th:text="${notice.viewCount}"></span>
+          </span>
+        </div>
+        <hr>
+        <div class="detail-body photos">
+          <p th:utext="${notice.noticeContent}"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	$("#form-notice-reply").validate({
+		rules:{
+			replyContent:{
+				//required:true,
+			}
+		},
+		submitHandler: function(form) {
+		    $.modal.loading("正在处理中，请稍后...");
+			var config = {
+				url :  /*[[@{/}]]*/'/login',
+				type : "post",
+				dataType : "json",
+				data : $('#form-notice-reply').serialize(),
+				success : function(result) {
+					if (result.code == web_status.SUCCESS) {
+						//$.modal.msgReload("保存成功,正在刷新数据请稍后……",modal_status.SUCCESS)
+						 $("#replyContent").val("");
+						 layer.msg("保存成功,正在刷新数据请稍后……", {icon: 0,time: 1000});
+						 loadReplyList();
+					} else {
+						$.modal.alertError(result.msg);
+					}
+					$.modal.closeLoading();
+				}
+			};
+			$.ajax(config);
+		}
+	});
+
+
+	$(document).ready(function(){
+		loadReplyList();
+	});
+	
+	//加载回答列表
+	function loadReplyList(){
+		$.ajax({
+	        type: "GET",
+	        url :  /*[[@{/}]]*/'/pub/blog/dataReply',
+	        data: {noticeId:$("#noticeId").val()},
+	        dataType: "json",
+	        success: function(data){
+	           //$('#replyUl').empty();   //清空resText里面的所有内容
+	           var html = ''; 
+	           if(data.suc){
+	        	   $.each(data.records, function(commentIndex, comment){
+	            	   html += '<li>'+
+		               '<div class="detail-about detail-about-reply" style="padding-left: 0px; ">'+
+		                 '<div class="detail-hits">'+
+		                   '<span>'+comment['createDateTimeStr']+'</span>'+
+		                 '</div>'+
+		               '</div>'+
+		               '<div class="detail-body jieda-body photos" style="margin-top: 5px;margin-bottom: 10px;">'+
+		                 '<p>'+comment['replyContent']+'</p>'+
+		               '</div>'+
+		             '</li>';
+	               });
+	        	   $('#replyUl').html(html);
+	        	   //设置回答次数
+	        	   $("#noticeReplyCountSpan").html(data.msg);
+	           }
+	        }
+	    });
+	}
+	//返回通知列表
+	function backNoticeList(){
+		window.location.href=/*[[@{/}]]*/'/pub/blog/flyList';
+	}
+</script>
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+</body>
+</html>

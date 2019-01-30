@@ -1,0 +1,175 @@
+﻿<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Nine Pavilion Uploader File Demo
+    </title>
+
+    <link rel="shortcut icon" href="http://fex.baidu.com/webuploader/images/favicon.ico">
+    <!-- loading.css -->
+    <link rel="stylesheet" type="text/css" href="/loading/css/dialog.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/syntax.css">
+    <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/webuploader.css">
+
+    <link rel="stylesheet" type="text/css" href="/Uploader/css/Uploader.css">
+
+    <!-- uploader js -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://fex.baidu.com/webuploader/js/global.js"></script>
+    <script type="text/javascript" src="http://fex.baidu.com/webuploader/js/webuploader.js"></script>
+    <!-- loading.js -->
+    <script src="/loading/js/zepto.min.js"></script>
+    <script type="text/javascript" src="/loading/js/dialog.min.js"></script>
+
+    <script type="text/javascript">
+        $.getScript("/user-login/token/token.js", function () {
+            VerificationToken();
+        });
+    </script>
+
+</head>
+
+<body style="">
+<style>
+    input, select, textarea {
+         outline: inherit;
+        border: none;
+         background: #fff;
+    }
+
+
+
+    .zyc button{width: 100px; height: 30px; background: #6dbfff; border-radius: 20px;text-align: center; line-height: 30px;border: none;}
+    .zyc input{ width: 220px; height: 20px}
+    .zyc{width: 300px;height:170px;overflow: hidden;background: rgba(0,0,0,0.5); text-align: center;position: absolute; z-index: 1;display: none;left: 10px;border-radius: 5px}
+
+    .wwd div{
+        float: left;
+    }
+    .wwd div a{
+        text-decoration: none;
+        color: white;
+    }
+</style>
+<div class="wwd" style="height: 50px; color: white;">
+    <div style="width: 100px; height: 40px;line-height: 40px;text-align: center;color: white;background: #8e9eba;margin-left: 10px">
+        <a  href="/Jump/Uploader">上传</a>
+    </div>
+    <div style="width: 100px; height: 40px;line-height: 40px;text-align: center;color: white;background: #8e9eba;margin-left: 10px">
+        <a href="/Jump/List">图集</a>
+    </div>
+    <div class="xs" style="width: 100px; height: 40px;line-height: 40px;text-align: center;color: white;background: #8e9eba;margin-left: 10px">
+        <b>点击添加账号</b>
+    </div>
+</div>
+<div class="zyc" style="color: white">
+    <br>
+    用户名：<input type="text" name="name" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    <br><br>
+    密 &nbsp;码：<input type="password" name="password" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    <br><br>
+    <button class="Preservation" style=" ">完成</button>
+</div>
+
+
+
+
+<div id="wrapper">
+
+    <!-- /.navbar -->
+    <div class="page-body">
+
+        <div id="post-container" class="container">
+
+
+            <div class="page-container">
+                <h1 id="demo">Nine Pavilion Uploader File Demo</h1>
+
+                <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮，来体验此demo.</p>
+
+                <div id="uploader" class="wu-example">
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker" class="webuploader-container"><div class="webuploader-pick">点击选择图片</div><div id="rt_rt_1cgqvjr4lgt31fq71ldpdm318821" style="position: absolute; top: 0px; left: 348.016px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;"><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"><label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label></div></div>
+                            <p>或将照片拖到这里，单次最多可选300张</p>
+                        </div>
+                        <ul class="filelist" style="display: none;"></ul></div>
+                    <div class="statusBar element-invisible" style="">
+                        <div class="progress" style="display: none;">
+                            <span class="text">0%</span>
+                            <span class="percentage" style="width: 0%;"></span>
+                        </div><div class="info">共0张（0B），已上传0张</div>
+                        <div class="btns">
+                            <div id="filePicker2" class="webuploader-container"><div class="webuploader-pick">继续添加</div><div id="rt_rt_1cgqvjr4olut16n1ih81m6687i6" style="position: absolute; top: 0px; left: 10px; width: 94px; height: 42px; overflow: hidden; bottom: auto; right: auto;"><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"><label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label></div></div><div class="uploadBtn state-pedding">开始上传</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div >
+                <span>标题：<input type="text" class="sd" name="title" style="border: #7e90b0 solid 1px"></span>&nbsp;&nbsp;
+                <span>标签：<input type="text" class="sd" name="label" style="border: #7e90b0 solid 1px"></span>
+            </div>
+
+        </div>
+    </div>
+    <div style="height: 120px"></div>
+    <div style="width: 100%;height: 100px; background:#000;position: fixed;bottom: 0px;text-align: center;">
+        <div class="footer-inner container">
+            <div >
+                <div>
+                    <p class="copyright" style="color: white;padding: 20px 0px 0px 0px">本页面由<a href="javascript:void(0)" style="color: white;">九阁科技</a>团队维护</p>
+                    <p style="color: white">©2013-2018 Nine Pavilion Team</p>
+                </div>
+
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/Uploader/js/Uploader.js"></script>
+
+<script>
+    // 注册一个用户
+    $(".Preservation").click(function () {
+        /* 加载loading */
+        $("body").append('<div class="loading"><div class="mask"></div>' +
+            '<div id="animationTipBox" style="width: 180px; height: 150px; margin-left: -90px; margin-top: -75px;"><div class="load"><div class="icon_box"><div class="cirBox1"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox2"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox3"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div></div></div><div class="dec_txt">加载中...</div></div></div>');
+        if($("input[name=name]").val()!=""&&$("input[name=password]").val()!=""){
+            $.post("/register/Creating_User", {
+                user_name:$("input[name=name]").val(),
+                user_password:$("input[name=password]").val()
+            },function (result) {
+                $(".loading").remove();
+                $.each(result, function (i, resultInfo) {
+                    if(resultInfo.errMsg=="OK"){
+                        popup({type:"success",msg:"添加成功",delay:3000});
+                    }else{
+                        popup({type:'error',msg:resultInfo.errMsg,delay:3000,bg:true,height:180});
+                    }
+                });
+            });
+        }else{
+            $(".loading").remove();
+            popup({type:'error',msg:"用户名和密码不能为空",delay:3000,bg:true});
+        }
+    })
+</script>
+<script>
+    $(".xs").click(function(){
+        $(".zyc").slideToggle();
+    });
+</script>
+</body>
+</html>
